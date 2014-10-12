@@ -1,9 +1,9 @@
 #!/usr/bin/python
-__author__ = 'arun raman'
+__author__ = 'arunraman'
 
 import sys
 
-def read_vmst(column_num,repeat,threshold):
+def read_vmstat(column_num,repeat,threshold):
     for linenum,line in enumerate(sys.stdin):
         if linenum == 2:
             l = line.split()
@@ -17,7 +17,7 @@ def Main():
     column_number = int(sys.argv[1])
     repeat = int(sys.argv[2])
     threshold = int(sys.argv[3])
-    read_vmst(column_number,repeat,threshold)
+    read_vmstat(column_number,repeat,threshold)
 
 if __name__ == '__main__':
     Main()
