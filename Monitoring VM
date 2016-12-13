@@ -1,0 +1,63 @@
+Monitoring VM
+-------------
+The approach is to get VM CPU utilization data from a live VM,
+We use Python-Fabric to drive the code in each of the VM.
+The monitor_system.py will do the all the computation work of
+determining if the VM is under utilized or over utilized.
+
+Prerequsites
+------------
+Make sure you have python-fabric installed on your host.
+
+sudo pip install python-fabric
+
+Make sure all the host are pingable from host. Also for
+convenience create one username/password for all the VMs
+you are trying to monitor. By this way you dont have to
+change the username/password for every VMs you are trying
+to monitor. After you have the username/password pair
+update it in the fabfile.
+
+How to run
+----------
+Place the fabfile.py and monitor_system.py in them same folder
+and run the fab file
+
+fab -H '192.168.33.10' execute_tasks:'1,20,30,50'
+
+here the ip address is the VM you are trying to monitor, you
+can more any number of VM ip seperated by a comma. eg
+
+fab -H '192.168.33.10,192.168.33.11,192.168.33.12'
+
+the parameters after execute_tasks are as follows
+
+minuties,cpu_threshold,mem_threshold,disk_threshold
+
+in the above example '1,20,30,50'
+the monitoring will run for 1 minute,
+the cpu threshold is 20%
+the memory threhsold is 30%
+the disk threshold is 50%
+
+What will you see
+-----------------
+when you run this you will see something like this for every host.
+
+$ fab -H '192.168.33.10' execute_tasks:'1,20,30,50'
+[192.168.33.10] Executing task 'execute_tasks'
+[192.168.33.10] run: mkdir -p /tmp/monitor
+[192.168.33.10] put: monitor_system.py -> /tmp/monitor/monitor_system.py
+[192.168.33.10] run: python /tmp/monitor/monitor_system.py 1 20 30 50
+[192.168.33.10] out: CPU Utilization: 5.38857
+[192.168.33.10] out:
+[192.168.33.10] out: Mem Utilization: 23.1495
+[192.168.33.10] out:
+[192.168.33.10] out: Disk Utilization: 27.0
+[192.168.33.10] out:
+[192.168.33.10] out: Under Utilized
+[192.168.33.10] out:
+
+Testing Status
+--------------
+Tested on Ubuntu 3.13.0-86-generic
